@@ -50,8 +50,8 @@ func TestEncodeSuccess(t *testing.T) {
 			name: "with struct tag",
 			input: struct {
 				A string `structuremap:"a"`
-				B int `structuremap:"b,omitempty"`
-				C int `structuremap:"c,omitempty"`
+				B int    `structuremap:"b,omitempty"`
+				C int    `structuremap:"c,omitempty"`
 				D []byte `structuremap:",omitempty"`
 				E []byte `structuremap:",omitempty"`
 			}{
