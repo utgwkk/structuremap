@@ -19,6 +19,23 @@ func TestEncodeSuccess(t *testing.T) {
 			})(nil),
 			want: nil,
 		},
+		{
+			name: "simple",
+			input: struct {
+				A string
+				B int
+				C []byte
+			}{
+				A: "aaa",
+				B: 100,
+				C: []byte("hello"),
+			},
+			want: map[string]any{
+				"A": "aaa",
+				"B": 100,
+				"C": []byte("hello"),
+			},
+		},
 	}
 	for _, tt := range testcases {
 		tt := tt
@@ -50,7 +67,7 @@ func TestEncodeFailure(t *testing.T) {
 			input: 100,
 		},
 		{
-			name: "string pointer",
+			name:  "string pointer",
 			input: ptrOf("aaa"),
 		},
 	}

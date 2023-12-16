@@ -19,6 +19,15 @@ func Encode(val any) (map[string]any, error) {
 		return nil, fmt.Errorf("not a struct type (%T)", val)
 	}
 
-	// TODO: implement it
-	return nil, nil
+	ty := v.Type()
+	result := make(map[string]any)
+	numField := v.NumField()
+	for i := 0; i < numField; i++ {
+		fieldValue := v.Field(i)
+		fieldType := ty.Field(i)
+		key := fieldType.Name
+		result[key] = fieldValue.Interface()
+	}
+
+	return result, nil
 }
