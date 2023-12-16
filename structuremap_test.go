@@ -46,6 +46,27 @@ func TestEncodeSuccess(t *testing.T) {
 				"A": "aaa",
 			},
 		},
+		{
+			name: "with struct tag",
+			input: struct {
+				A string `structuremap:"a"`
+				B int `structuremap:"b,omitempty"`
+				C int `structuremap:"c,omitempty"`
+				D []byte `structuremap:",omitempty"`
+				E []byte `structuremap:",omitempty"`
+			}{
+				A: "aaa",
+				B: 100,
+				// C
+				D: []byte("hello"),
+				// E
+			},
+			want: map[string]any{
+				"a": "aaa",
+				"b": 100,
+				"D": []byte("hello"),
+			},
+		},
 	}
 	for _, tt := range testcases {
 		tt := tt
