@@ -2,7 +2,10 @@ module github.com/utgwkk/structuremap
 
 go 1.21
 
-require github.com/mfridman/tparse v0.13.2
+require (
+	github.com/google/go-cmp v0.6.0
+	github.com/mfridman/tparse v0.13.2
+)
 
 require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
