@@ -19,7 +19,10 @@ func Encode(val any) (map[string]any, error) {
 	if v.Kind() != reflect.Struct {
 		return nil, fmt.Errorf("not a struct type (%T)", val)
 	}
+	return encode(v)
+}
 
+func encode(v reflect.Value) (map[string]any, error) {
 	ty := v.Type()
 	result := make(map[string]any)
 	numField := v.NumField()
