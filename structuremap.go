@@ -31,6 +31,10 @@ func Encode(val any) (map[string]any, error) {
 		}
 
 		tag := parseStructTag(fieldType)
+		if tag.ignore {
+			continue
+		}
+
 		if tag.omitEmpty && fieldValue.IsZero() {
 			continue
 		}
@@ -43,6 +47,8 @@ func Encode(val any) (map[string]any, error) {
 type structTag struct {
 	key       string
 	omitEmpty bool
+
+	ignore bool
 }
 
 func parseStructTag(field reflect.StructField) *structTag {
@@ -50,6 +56,11 @@ func parseStructTag(field reflect.StructField) *structTag {
 	if tag == "" {
 		return &structTag{
 			key: field.Name,
+		}
+	}
+	if tag == "-" {
+		return &structTag{
+			ignore: true,
 		}
 	}
 
