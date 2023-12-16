@@ -67,6 +67,22 @@ func TestEncodeSuccess(t *testing.T) {
 				"D": []byte("hello"),
 			},
 		},
+		{
+			name: "ignore field",
+			input: struct {
+				A string `structuremap:"a"`
+				B int    `structuremap:"b,omitempty"`
+				C int    `structuremap:"-"`
+			}{
+				A: "aaa",
+				B: 100,
+				// C
+			},
+			want: map[string]any{
+				"a": "aaa",
+				"b": 100,
+			},
+		},
 	}
 	for _, tt := range testcases {
 		tt := tt
