@@ -3,6 +3,7 @@ package structuremap
 import (
 	"fmt"
 	"reflect"
+	"strings"
 )
 
 func Encode(val any) (map[string]any, error) {
@@ -29,9 +30,45 @@ func Encode(val any) (map[string]any, error) {
 			continue
 		}
 
-		key := fieldType.Name
-		result[key] = fieldValue.Interface()
+		tag := parseStructTag(fieldType)
+		if tag.omitEmpty && fieldValue.IsZero() {
+			continue
+		}
+		result[tag.key] = fieldValue.Interface()
 	}
 
 	return result, nil
+}
+
+type structTag struct {
+	key       string
+	omitEmpty bool
+}
+
+func parseStructTag(field reflect.StructField) *structTag {
+	tag := field.Tag.Get("structuremap")
+	if tag == "" {
+		return &structTag{
+			key: field.Name,
+		}
+	}
+
+	splitted := strings.Split(tag, ",")
+	key := field.Name
+	if len(splitted) > 0 {
+		maybeKey := splitted[0]
+		if maybeKey != "" {
+			key = maybeKey
+		}
+	}
+
+	isOmitEmpty := false
+	if len(splitted) > 1 {
+		maybeOmitempty := splitted[1]
+		isOmitEmpty = maybeOmitempty == "omitempty"
+	}
+	return &structTag{
+		key:       key,
+		omitEmpty: isOmitEmpty,
+	}
 }
