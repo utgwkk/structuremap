@@ -25,6 +25,10 @@ func Encode(val any) (map[string]any, error) {
 	for i := 0; i < numField; i++ {
 		fieldValue := v.Field(i)
 		fieldType := ty.Field(i)
+		if !fieldType.IsExported() {
+			continue
+		}
+
 		key := fieldType.Name
 		result[key] = fieldValue.Interface()
 	}

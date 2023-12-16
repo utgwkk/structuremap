@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/utgwkk/structuremap/testdata"
 )
 
 func TestEncodeSuccess(t *testing.T) {
@@ -34,6 +35,15 @@ func TestEncodeSuccess(t *testing.T) {
 				"A": "aaa",
 				"B": 100,
 				"C": []byte("hello"),
+			},
+		},
+		{
+			name: "ignore unexported field",
+			input: testdata.HasUnexportedField{
+				A: "aaa",
+			},
+			want: map[string]any{
+				"A": "aaa",
 			},
 		},
 	}
