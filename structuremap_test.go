@@ -14,13 +14,6 @@ func TestEncodeSuccess(t *testing.T) {
 		want  map[string]any
 	}{
 		{
-			name: "nil",
-			input: (*struct {
-				A string
-			})(nil),
-			want: nil,
-		},
-		{
 			name: "simple",
 			input: struct {
 				A string
@@ -83,6 +76,26 @@ func TestEncodeSuccess(t *testing.T) {
 				"b": 100,
 			},
 		},
+		{
+			name: "recursive",
+			input: struct {
+				A string `structuremap:"a"`
+				B *struct{
+					C int
+				} `structuremap:"b"`
+			}{
+				A: "aaa",
+				B: &struct{C int}{
+					C: 1,
+				},
+			},
+			want: map[string]any{
+				"a": "aaa",
+				"b": map[string]any{
+					"C": 1,
+				},
+			},
+		},
 	}
 	for _, tt := range testcases {
 		tt := tt
@@ -105,6 +118,12 @@ func TestEncodeFailure(t *testing.T) {
 		name  string
 		input any
 	}{
+		{
+			name: "nil",
+			input: (*struct {
+				A string
+			})(nil),
+		},
 		{
 			name:  "string",
 			input: "aaa",
